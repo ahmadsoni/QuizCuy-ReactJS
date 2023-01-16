@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import {useEffect, useState, useCallback} from 'react';
 import {createClient} from '@supabase/supabase-js';
-import {useNavigate, Routes, Route} from 'react-router-dom';
+import {useNavigate, Routes, Route, Navigate} from 'react-router-dom';
 import config from '../../config.json';
 import Settings from './quiz/Settings';
 import Question from './quiz/Question';
@@ -14,10 +16,21 @@ import {ReactQueryDevtools} from 'react-query/devtools';
 const queryClient = new QueryClient();
 const {supabaseUrl, supabaseAnonKey} = config;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-const {data, error} = await supabase.auth.getSession();
+// Const {data, error} = await supabase.auth.getSession();const [session, setSession] = useState<{session: any; error: any}>({session: undefined, error: undefined});
 
 export default function Quiz(): any {
-	if (data.session) {
+	const navigate = useNavigate();
+	const [session, setSession] = useState<any | undefined>(undefined);
+	useEffect(() => {
+		void supabase.auth.getSession().then(({data: {session}}) => {
+			setSession(session);
+		});
+
+		supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+	}, []);
+	if (session) {
 		return (
 			<>
 				<QueryClientProvider client={queryClient}>
@@ -37,7 +50,7 @@ export default function Quiz(): any {
 		);
 	}
 
-	if (!data.session) {
-		window.location.href = '/';
+	if (!session) {
+		navigate('/');
 	}
 }

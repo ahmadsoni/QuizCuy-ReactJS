@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import AppBar from '@mui/material/AppBar';
 import {Box} from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,8 +13,25 @@ import {useEffect, useState, useCallback} from 'react';
 
 const {supabaseUrl, supabaseAnonKey} = config;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-const {data, error} = await supabase.auth.getSession();
+// Const {data, error} = await supabase.auth.getSession();
+type Session = {
+	user: {
+		user_metadata: {
+			name: string;
+		};
+	};
+};
 function Navbar() {
+	const [session, setSession] = useState<any | undefined>(undefined);
+	useEffect(() => {
+		void supabase.auth.getSession().then(({data: {session}}) => {
+			setSession(session);
+		});
+
+		supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+	}, []);
 	const handleLogout = async () => {
 		await supabase.auth.signOut();
 		window.location.href = '/';
@@ -40,7 +59,7 @@ function Navbar() {
 								textDecoration: 'none',
 							}}
 						>
-							Hello, {data.session?.user.user_metadata.name || 'User'}
+							Hello, {session?.user?.user_metadata.name ?? 'User'}
 						</Typography>
 					</Box>
 
