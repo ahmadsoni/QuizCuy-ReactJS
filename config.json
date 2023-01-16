@@ -1,0 +1,6 @@
+{
+    "supabaseUrl" : "https://tgpfguwhsginlrjxoojz.supabase.co",
+    "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRncGZndXdoc2dpbmxyanhvb2p6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njk5ODM2NTQsImV4cCI6MTk4NTU1OTY1NH0.rk_fppb_mRDK0vYWBFltLQJJfOWSTYgiC-K9PmapDOE",
+    "url": "https://opentdb.com/",
+    "urlCategory": "api_category.php"
+}
