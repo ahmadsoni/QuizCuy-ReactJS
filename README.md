@@ -48,10 +48,10 @@ npm run dev
 
 👉 🖥️ Versi Desktop
 <div align="center">
-<img src="./public/desktop-1.png" alt="Desktop" width="35%" />
-<img src="./public/desktop-2.png" alt="Desktop" width="35%" />
-<img src="./public/desktop-3.png" alt="Desktop" width="35%" />
-<img src="./public/desktop-4.png" alt="Desktop" width="35%" />
+<img src="./public/desktop-1.png" alt="Desktop" width="50%" />
+<img src="./public/desktop-2.png" alt="Desktop" width="50%" />
+<img src="./public/desktop-3.png" alt="Desktop" width="50%" />
+<img src="./public/desktop-4.png" alt="Desktop" width="50%" />
 
 </div>
 👉 📱 Versi Mobile
