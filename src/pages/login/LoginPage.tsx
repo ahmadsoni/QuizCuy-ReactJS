@@ -36,22 +36,13 @@ export default function Login() {
 		}
 	}, [session]);
 
-	// Supabase.auth.onAuthStateChange(async event => {
-	// 	if (event !== 'SIGNED_OUT' || session !== null) {
-	// 		window.location.href = '/quiz/';
-	// 	} else if (event === 'SIGNED_OUT' && session === null) {
-	// 		window.location.href = '/';
-	// 	}
-	// });
-
 	return (
 		// Full content
 		<div className='bg-black h-screen w-screen'>
 			<div className='flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
 				<Auth
 					supabaseClient={supabase}
-					appearance={{
-						theme: ThemeSupa}}
+					appearance={{theme: ThemeSupa}}
 					theme='dark'
 					providers={['google']}
 				/>
