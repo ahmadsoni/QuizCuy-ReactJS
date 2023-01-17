@@ -15,7 +15,7 @@
 - 📈 Auth using supabase
 - 📦 Redux
 - 🎯 React Query
-- 🤖 API using trivia api
+- 🤖 API using Open trivia api
 - ⌛ Time Quiz
 - 📃 Count Quiz
 - 📊 Score Quiz
