@@ -5,6 +5,7 @@ import {
 	changeAmount,
 	changeScore,
 	changeData,
+	wrongAnswer,
 } from './actionTypes';
 
 export const handleCategoryChange = (payload: string) => ({
@@ -30,5 +31,9 @@ export const handleScoreChange = (payload: number) => ({
 
 export const handleDataChange = (payload: number) => ({
 	type: changeData,
+	payload,
+});
+export const handleWrongAnswer = (payload: number) => ({
+	type: wrongAnswer,
 	payload,
 });

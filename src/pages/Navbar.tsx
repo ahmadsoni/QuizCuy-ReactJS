@@ -13,7 +13,7 @@ import {useEffect, useState, useCallback} from 'react';
 
 const {supabaseUrl, supabaseAnonKey} = config;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Const {data, error} = await supabase.auth.getSession();
+
 type Session = {
 	user: {
 		user_metadata: {
@@ -41,37 +41,31 @@ function Navbar() {
 		<AppBar position='static'>
 			<Container maxWidth='xl'>
 				<Toolbar disableGutters>
-					<AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}} />
-					<AdbIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}} />
-					<Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-						<Typography
-							variant='h6'
-							noWrap
-							component='a'
-							href='/quiz/'
-							sx={{
-								mr: 2,
-								display: {xs: 'none', md: 'flex'},
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
+					<Typography
+						variant='h6'
+						noWrap
+						component='a'
+						href='/quiz/'
+						sx={{
+							mr: 2,
+							display: {xs: 'none', md: 'flex'},
+							fontFamily: 'monospace',
+							fontWeight: 700,
+							letterSpacing: '.3rem',
+							color: 'inherit',
+							textDecoration: 'none',
+							flexGrow: 1,
+						}}
+					>
 							Hello, {session?.user?.user_metadata.name ?? 'User'}
-						</Typography>
-					</Box>
-
-					<Box sx={{flexGrow: 0}}>
-						<Button
-							color='secondary'
-							onClick={handleLogout}
-							sx={{my: 2, color: 'white', display: 'block'}}
-						>
+					</Typography>
+					<Button
+						color='inherit'
+						onClick={handleLogout}
+						sx={{my: 2, flexGrow: 1, alignItems: 'end', justifyContent: 'end'}}
+					>
 								Logout
-						</Button>
-					</Box>
+					</Button>
 				</Toolbar>
 			</Container>
 		</AppBar>

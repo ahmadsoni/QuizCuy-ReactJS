@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {Button, CircularProgress, Typography} from '@mui/material';
-import {Box} from '@mui/material';
+import {Box, Grid} from '@mui/material';
 import {useSelector, useDispatch} from 'react-redux';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {handleScoreChange, handleDataChange} from '../../redux/actions';
+import {handleScoreChange, handleDataChange, handleWrongAnswer} from '../../redux/actions';
 import {decode} from 'html-entities';
 import config from '../../../config.json';
 import {useQuery, type UseQueryResult} from 'react-query';
@@ -15,6 +15,7 @@ type QuestionProps = {
 	questionDifficulty: string;
 	amountOfQuestions: number;
 	score: number;
+	wrongAnswer: number;
 };
 type UseAxiosProps = {
 	response: {
@@ -35,6 +36,8 @@ const getRandomInt = (max: number) => Math.floor(Math.random() * max);
 export default function Question() {
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const [options, setOptions] = useState<string[]>([]);
+	const [totalQuestions, setTotalQuestions] = useState(0);
+	const [Soal, setSoal] = useState('');
 
 	const {
 		questionCategory,
@@ -42,6 +45,7 @@ export default function Question() {
 		questionDifficulty,
 		amountOfQuestions,
 		score,
+		wrongAnswer,
 	} = useSelector((state: QuestionProps) => state);
 	let apiUrl = `api.php?amount=${amountOfQuestions}`;
 	const navigate = useNavigate();
@@ -50,32 +54,64 @@ export default function Question() {
 		apiUrl = apiUrl.concat(`&category=${questionCategory}`);
 	}
 
-	if (questionType) {
-		apiUrl = apiUrl.concat(`&type=${questionType}`);
-	}
-
 	if (questionDifficulty) {
 		apiUrl = apiUrl.concat(`&difficulty=${questionDifficulty}`);
 	}
 
+	if (questionType) {
+		apiUrl = apiUrl.concat(`&type=${questionType}`);
+	}
+
+	console.log('api link  = ', apiUrl);
 	const useReactQuery = async () => {
 		const response = await fetch(config.url + apiUrl);
-		return response.json();
+		const data = response.json();
+		return data;
 	};
 
 	const {data, isError, isLoading} = useQuery(
 		'result',
 		useReactQuery,
 	);
+	// Get question
+	const handleAnswer = useMemo(() => async () => {
+		console.log(data);
+		setTotalQuestions(await data?.results.length);
+		if (data?.results.length) {
+			const question = await data.results[questionIndex];
+			const answers: string[] = [...question.incorrect_answers];
+			answers.splice(
+				getRandomInt(question.incorrect_answers.length),
+				0,
+				question.correct_answer,
+			);
+			setSoal(decode(data?.results[questionIndex].question));
+			setOptions([...answers]);
+		}
+	}, [!isLoading, questionIndex]);
+	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		handleAnswer();
+	}, [handleAnswer]);
+	// Handle answer
 	const handleClickAnswere = (e: any) => {
+		console.log('soal', data.results[questionIndex].correct_answer);
+		console.log('jawaban', e.target.textContent);
 		const question = data.results[questionIndex];
 		if (e.target.textContent === question.correct_answer) {
+			console.log('masuk score');
 			dispatch(handleScoreChange(score + 1));
+		}
+
+		if (e.target.textContent !== question.correct_answer) {
+			console.log('masuk wrong');
+			dispatch(handleWrongAnswer(wrongAnswer + 1));
 		}
 
 		if (questionIndex + 1 < data.results.length) {
 			setQuestionIndex(questionIndex + 1);
 		} else {
+			console.log('lah gak masuk score');
 			dispatch(handleDataChange(data?.results.length));
 			navigate('/quiz/score');
 		}
@@ -88,6 +124,7 @@ export default function Question() {
 				setTime(time - 1);
 			}, 1000);
 			if (time === 0) {
+				dispatch(handleWrongAnswer(wrongAnswer + 1));
 				if (questionIndex + 1 < data.results.length) {
 					setQuestionIndex(questionIndex + 1);
 				} else {
@@ -103,26 +140,22 @@ export default function Question() {
 				clearTimeout(timer);
 			};
 		}, [time]);
-		return <Typography variant='h4' mb={4} color={'error'} sx={{display: 'flex', justifyContent: 'flex-end', flexGrow: 0}}>Time: {time}</Typography>;
+		return (
+			<Grid
+				container
+				direction='column-reverse'
+				justifyContent='end'
+				alignItems='end'
+				mb={4}
+			>
+				<Button variant='outlined' color='error' sx={{display: 'flex', justifyContent: 'flex-end', flexGrow: 1}}>
+					<Typography variant='h5' color={'error'} >Time: {time}</Typography>
+				</Button>
+
+			</Grid>
+		);
 	};
 
-	// Console.log(data);
-	const handleAnswer = useMemo(() => () => {
-		if (data?.results.length) {
-			const question = data.results[questionIndex];
-			const answers: string[] = [...question.incorrect_answers];
-			answers.splice(
-				getRandomInt(question.incorrect_answers.length),
-				0,
-				question.correct_answer,
-			);
-			setOptions([...answers]);
-			// Console.log('render ulang');
-		}
-	}, [!isLoading, questionIndex]);
-	useEffect(() => {
-		handleAnswer();
-	}, [handleAnswer]);
 	if (isLoading && !data) {
 		return (
 			<Box mt={20}>
@@ -145,8 +178,8 @@ export default function Question() {
 		<>
 			<TimerQuiz />
 			<Box>
-				<Typography variant='h4'> Question {questionIndex + 1}</Typography>
-				<Typography mt={5}> {decode(data?.results[questionIndex].question)}</Typography>
+				<Typography variant='h4'> Question {questionIndex + 1} / {totalQuestions}</Typography>
+				<Typography mt={5}> {Soal}</Typography>
 				{options.map((data, id) => (
 					<Box mt={2} key={id} >
 						<Button onClick={handleClickAnswere} fullWidth variant='contained'>

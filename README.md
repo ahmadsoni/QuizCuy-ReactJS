@@ -9,6 +9,8 @@
 [![Depfu](https://badges.depfu.com/badges/fc6e730632ab9dacaf7df478a08684a7/overview.svg)](https://depfu.com/ahmadsoni/QuizCuy-ReactJS?project_id=30160)
 
 </div>
+# Fitur
+Repositori ini dikemas dengan teknologi :
 - ⚛️ React 18
 - ✨ TypeScript
 - 💨 Material UI
