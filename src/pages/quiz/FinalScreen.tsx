@@ -29,7 +29,7 @@ export default function FinalScreen() {
 	const dispatch = useDispatch();
 	const handleBackToSettings = () => {
 		setReturnToSettings(true);
-		window.location.href = '/quiz';
+		window.location.href = '/';
 		dispatch(handleScoreChange(0));
 		dispatch(handleWrongAnswer(0));
 		dispatch(handleAmountChange(10));
