@@ -41,7 +41,6 @@ export default function Settings() {
 			dispatch(handleScoreChange(0));
 			dispatch(handleWrongAnswer(0));
 			dispatch(handleAmountChange(10));
-			window.location.reload();
 			dispatch(handleChangeVisited(false));
 		}
 	}, [changeVisited]);

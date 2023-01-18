@@ -23,15 +23,13 @@ const StyledPaper = styled(Paper)(({theme}) => ({
 	color: theme.palette.text.primary,
 }));
 export default function FinalScreen() {
-	const {amountOfQuestions, score, wrongAnswer} = useSelector((state: QuestionProps) => state);
+	const {amountOfQuestions, score, wrongAnswer, changeVisited} = useSelector((state: QuestionProps) => state);
 	const [totalScore, setTotalScore] = useState(0);
-	const [returnToSettings, setReturnToSettings] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const handleBackToSettings = () => {
-		setReturnToSettings(true);
-		navigate('/quiz/');
 		dispatch(handleChangeVisited(true));
+		window.location.href = '/';
 	};
 
 	// Console.log(data);
@@ -39,7 +37,7 @@ export default function FinalScreen() {
 	useEffect(() => {
 		setTotalScore(Math.round((score / amountOfQuestions) * 100));
 	}, [score]);
-	if (returnToSettings) {
+	if (changeVisited) {
 		return (
 			<Box mt={20}>
 				<CircularProgress />
