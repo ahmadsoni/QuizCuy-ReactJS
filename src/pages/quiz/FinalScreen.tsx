@@ -30,7 +30,7 @@ export default function FinalScreen() {
 	const dispatch = useDispatch();
 	const handleBackToSettings = () => {
 		setReturnToSettings(true);
-		navigate('/');
+		navigate('/quiz/');
 		dispatch(handleChangeVisited(true));
 	};
 
