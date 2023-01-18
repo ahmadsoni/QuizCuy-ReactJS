@@ -4,7 +4,7 @@ import {Box, Grid} from '@mui/material';
 import {useSelector, useDispatch} from 'react-redux';
 import {useEffect, useMemo, useState, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {handleScoreChange, handleDataChange, handleWrongAnswer} from '../../redux/actions';
+import {handleScoreChange, handleWrongAnswer} from '../../redux/actions';
 import {decode} from 'html-entities';
 import config from '../../../config.json';
 import {useQuery, type UseQueryResult} from 'react-query';
@@ -16,19 +16,6 @@ type QuestionProps = {
 	amountOfQuestions: number;
 	score: number;
 	wrongAnswer: number;
-};
-type UseAxiosProps = {
-	response: {
-		results: Array<{
-			category: string;
-			type: string;
-			difficulty: string;
-			question: string;
-			correct_answer: string;
-			incorrect_answers: string[];
-		}>;
-	};
-	loading: boolean;
 };
 
 const getRandomInt = (max: number) => Math.floor(Math.random() * max);
@@ -47,6 +34,7 @@ export default function Question() {
 		score,
 		wrongAnswer,
 	} = useSelector((state: QuestionProps) => state);
+
 	let apiUrl = `api.php?amount=${amountOfQuestions}`;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -62,7 +50,7 @@ export default function Question() {
 		apiUrl = apiUrl.concat(`&type=${questionType}`);
 	}
 
-	console.log('api link  = ', apiUrl);
+	// Console.log('api link  = ', apiUrl);
 	const useReactQuery = async () => {
 		const response = await fetch(config.url + apiUrl);
 		const data = response.json();
@@ -95,8 +83,6 @@ export default function Question() {
 	}, [handleAnswer]);
 	// Handle answer
 	const handleClickAnswere = (e: any) => {
-		console.log('soal', data.results[questionIndex].correct_answer);
-		console.log('jawaban', e.target.textContent);
 		const question = data.results[questionIndex];
 		if (e.target.textContent === question.correct_answer) {
 			console.log('masuk score');
@@ -111,8 +97,6 @@ export default function Question() {
 		if (questionIndex + 1 < data.results.length) {
 			setQuestionIndex(questionIndex + 1);
 		} else {
-			console.log('lah gak masuk score');
-			dispatch(handleDataChange(data?.results.length));
 			navigate('/quiz/score');
 		}
 	};

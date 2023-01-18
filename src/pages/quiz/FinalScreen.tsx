@@ -1,18 +1,19 @@
+
 import {Button, Typography, CircularProgress, Box, Paper, styled} from '@mui/material';
 import Grid from '@mui/material/Grid';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {handleScoreChange, handleAmountChange, handleWrongAnswer} from '../../redux/actions';
+import {handleScoreChange, handleAmountChange, handleWrongAnswer, handleChangeVisited} from '../../redux/actions';
 import {useState, useEffect} from 'react';
+
 type QuestionProps = {
 	questionCategory: string;
 	questionType: string;
 	questionDifficulty: string;
 	amountOfQuestions: number;
 	score: number;
-	data: number;
 	wrongAnswer: number;
+	changeVisited: boolean;
 };
 const StyledPaper = styled(Paper)(({theme}) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,25 +23,21 @@ const StyledPaper = styled(Paper)(({theme}) => ({
 	color: theme.palette.text.primary,
 }));
 export default function FinalScreen() {
-	const {amountOfQuestions, data, score, wrongAnswer} = useSelector((state: QuestionProps) => state);
+	const {amountOfQuestions, score, wrongAnswer} = useSelector((state: QuestionProps) => state);
 	const [totalScore, setTotalScore] = useState(0);
 	const [returnToSettings, setReturnToSettings] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const currentUrl = window.location.origin;
-	const url = `${currentUrl}/quiz/`;
 	const handleBackToSettings = () => {
 		setReturnToSettings(true);
-		window.location.href = url;
-		dispatch(handleScoreChange(0));
-		dispatch(handleWrongAnswer(0));
-		dispatch(handleAmountChange(10));
+		navigate('/quiz');
+		dispatch(handleChangeVisited(true));
 	};
 
 	// Console.log(data);
 	// console.log(score);
 	useEffect(() => {
-		setTotalScore(Math.round((score / data) * 100));
+		setTotalScore(Math.round((score / amountOfQuestions) * 100));
 	}, [score]);
 	if (returnToSettings) {
 		return (

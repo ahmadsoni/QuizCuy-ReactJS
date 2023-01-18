@@ -4,8 +4,8 @@ import {
 	changeDifficulty,
 	changeAmount,
 	changeScore,
-	changeData,
 	wrongAnswer,
+	changeVisited,
 } from './actionTypes';
 
 export const handleCategoryChange = (payload: string) => ({
@@ -29,11 +29,12 @@ export const handleScoreChange = (payload: number) => ({
 	payload,
 });
 
-export const handleDataChange = (payload: number) => ({
-	type: changeData,
-	payload,
-});
 export const handleWrongAnswer = (payload: number) => ({
 	type: wrongAnswer,
+	payload,
+});
+
+export const handleChangeVisited = (payload: boolean) => ({
+	type: changeVisited,
 	payload,
 });

@@ -6,6 +6,9 @@ import {Box} from '@mui/material';
 import TextFieldComp from '../../components/TextFieldComp';
 import {useQuery, type UseQueryResult} from 'react-query';
 import config from '../../../config.json';
+import {handleScoreChange, handleWrongAnswer, handleChangeVisited, handleAmountChange} from '../../redux/actions';
+import {useEffect, useMemo, useState, useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 type TriviaProps = {
 	id: string;
@@ -16,9 +19,32 @@ type DataProps = {
 	isError: boolean;
 	isLoading: boolean;
 };
+type QuestionProps = {
+	questionCategory: string;
+	questionType: string;
+	questionDifficulty: string;
+	amountOfQuestions: number;
+	score: number;
+	wrongAnswer: number;
+	changeVisited: boolean;
+};
 
 export default function Settings() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const {
+		changeVisited,
+	} = useSelector((state: QuestionProps) => state);
+
+	useEffect(() => {
+		if (changeVisited) {
+			dispatch(handleScoreChange(0));
+			dispatch(handleWrongAnswer(0));
+			dispatch(handleAmountChange(10));
+			window.location.reload();
+			dispatch(handleChangeVisited(false));
+		}
+	}, [changeVisited]);
 
 	const {data, isError, isLoading}: UseQueryResult<DataProps, Error> = useQuery<DataProps, Error>(
 		'categories',

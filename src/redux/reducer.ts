@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/default-param-last */
-import {changeType, changeCategory, changeDifficulty, changeAmount, changeScore, changeData, wrongAnswer} from './actionTypes';
+import {changeType, changeCategory, changeDifficulty, changeAmount, changeScore, wrongAnswer, changeVisited} from './actionTypes';
 type InitalStateProps = {
 	questionCategory: string;
 	questionType: string;
 	questionDifficulty: string;
 	amountOfQuestions: number;
 	score: number;
-	data: number;
 	wrongAnswer: number;
+	changeVisited: boolean;
 };
 type ActionProps = {
 	type: Record<string, unknown>;
@@ -21,8 +21,8 @@ const initialState: InitalStateProps = {
 	questionDifficulty: '',
 	amountOfQuestions: 10,
 	score: 0,
-	data: 0,
 	wrongAnswer: 0,
+	changeVisited: false,
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -52,15 +52,15 @@ const reducer = (state = initialState, action: any) => {
 				...state,
 				score: action.payload,
 			};
-		case changeData:
-			return {
-				...state,
-				data: action.payload,
-			};
 		case wrongAnswer:
 			return {
 				...state,
 				wrongAnswer: action.payload,
+			};
+		case changeVisited:
+			return {
+				...state,
+				changeVisited: action.payload,
 			};
 		default:
 			return state;
