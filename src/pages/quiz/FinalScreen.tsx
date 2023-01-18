@@ -27,9 +27,11 @@ export default function FinalScreen() {
 	const [returnToSettings, setReturnToSettings] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const currentUrl = window.location.origin;
+	const url = `${currentUrl}/quiz/`;
 	const handleBackToSettings = () => {
 		setReturnToSettings(true);
-		navigate('/quiz');
+		window.location.href = url;
 		dispatch(handleScoreChange(0));
 		dispatch(handleWrongAnswer(0));
 		dispatch(handleAmountChange(10));
