@@ -9,6 +9,7 @@ import config from '../../../config.json';
 import {handleScoreChange, handleWrongAnswer, handleChangeVisited, handleAmountChange} from '../../redux/actions';
 import {useEffect, useMemo, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import Cookies from 'js-cookie';
 
 type TriviaProps = {
 	id: string;
@@ -36,6 +37,7 @@ export default function Settings() {
 		changeVisited,
 	} = useSelector((state: QuestionProps) => state);
 
+	Cookies.remove('score');
 	useEffect(() => {
 		if (changeVisited) {
 			dispatch(handleScoreChange(0));

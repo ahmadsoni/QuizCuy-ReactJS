@@ -2,10 +2,14 @@
 import {Button, Typography, CircularProgress, Box, Paper, styled} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
-import {handleScoreChange, handleAmountChange, handleWrongAnswer, handleChangeVisited} from '../../redux/actions';
-import {useState, useEffect} from 'react';
-
+import Cookies from 'js-cookie';
+import {handleChangeVisited} from '../../redux/actions';
+type CookiesScore = {
+	amountOfQuestions: number;
+	wrongAnswer: number;
+	score: number;
+	totalScore: number;
+};
 type QuestionProps = {
 	questionCategory: string;
 	questionType: string;
@@ -23,20 +27,27 @@ const StyledPaper = styled(Paper)(({theme}) => ({
 	color: theme.palette.text.primary,
 }));
 export default function FinalScreen() {
-	const {amountOfQuestions, score, wrongAnswer, changeVisited} = useSelector((state: QuestionProps) => state);
-	const [totalScore, setTotalScore] = useState(0);
-	const navigate = useNavigate();
+	const {changeVisited} = useSelector((state: QuestionProps) => state);
 	const dispatch = useDispatch();
+	const {
+		amountOfQuestions,
+		score,
+		wrongAnswer,
+	} = useSelector((state: QuestionProps) => state);
 	const handleBackToSettings = () => {
 		dispatch(handleChangeVisited(true));
 		window.location.href = '/';
 	};
 
-	// Console.log(data);
-	// console.log(score);
-	useEffect(() => {
-		setTotalScore(Math.round((score / amountOfQuestions) * 100));
-	}, [score]);
+	const totalScore: number = Math.round((score / amountOfQuestions) * 100);
+	// Const ScoreFinal: CookiesScore = {
+	// 	amountOfQuestions,
+	// 	wrongAnswer,
+	// 	score,
+	// 	totalScore,
+	// };
+	// Cookies.set('score', JSON.stringify(ScoreFinal));
+	// const dataLoaded = JSON.parse(Cookies.get('score') ?? '{}');
 	if (changeVisited) {
 		return (
 			<Box mt={20}>
@@ -47,7 +58,7 @@ export default function FinalScreen() {
 
 	return (
 		<Box sx={{flexGrow: 1, overflow: 'hidden', px: 3}} mt={20}>
-			<Typography variant='h3' fontWeight='bold' mb={3}>
+			<Typography variant='h4' fontWeight='bold' mb={3}>
 				Score:  {totalScore ? totalScore : 0} / 100
 			</Typography>
 			<StyledPaper
