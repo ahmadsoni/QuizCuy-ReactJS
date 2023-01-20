@@ -37,7 +37,10 @@ export default function Settings() {
 		changeVisited,
 	} = useSelector((state: QuestionProps) => state);
 
-	Cookies.remove('score');
+	Cookies.remove('answer');
+	localStorage.removeItem('result');
+	localStorage.removeItem('options');
+	localStorage.removeItem('answers');
 	useEffect(() => {
 		if (changeVisited) {
 			dispatch(handleScoreChange(0));

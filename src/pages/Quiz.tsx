@@ -7,11 +7,13 @@ import config from '../../config.json';
 import Settings from './quiz/Settings';
 import Question from './quiz/Question';
 import FinalScreen from './quiz/FinalScreen';
+import Evaluation from './quiz/Evaluation';
 import {Container, Typography} from '@mui/material';
 import {Box} from '@mui/material';
 import Navbar from './Navbar';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
+import Resume from './quiz/Resume';
 
 const queryClient = new QueryClient();
 const {supabaseUrl, supabaseAnonKey} = config;
@@ -41,6 +43,8 @@ export default function Quiz(): any {
 								<Route path='/' element={<Settings />}/>
 								<Route path='/question' element={<Question />} />
 								<Route path='/score' element={<FinalScreen />} />
+								<Route path='/evaluation' element={<Evaluation />} />
+								<Route path='/resume' element={<Resume />} />
 							</Routes>
 						</Box>
 					</Container>

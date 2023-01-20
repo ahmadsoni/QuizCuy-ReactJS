@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {Button, CircularProgress, Typography} from '@mui/material';
 import {Box, Grid} from '@mui/material';
@@ -8,6 +9,7 @@ import {handleScoreChange, handleWrongAnswer} from '../../redux/actions';
 import {decode} from 'html-entities';
 import config from '../../../config.json';
 import {useQuery, type UseQueryResult} from 'react-query';
+import Cookies from 'js-cookie';
 
 type QuestionProps = {
 	questionCategory: string;
@@ -50,7 +52,6 @@ export default function Question() {
 		apiUrl = apiUrl.concat(`&type=${questionType}`);
 	}
 
-	// Console.log('api link  = ', apiUrl);
 	const useReactQuery = async () => {
 		const response = await fetch(config.url + apiUrl);
 		const data = response.json();
@@ -63,7 +64,6 @@ export default function Question() {
 	);
 	// Get question
 	const handleAnswer = useMemo(() => async () => {
-		console.log(data);
 		setTotalQuestions(await data?.results.length);
 		if (data?.results.length) {
 			const question = await data.results[questionIndex];
@@ -82,17 +82,30 @@ export default function Question() {
 		handleAnswer();
 	}, [handleAnswer]);
 	// Handle answer
+
 	const handleClickAnswere = (e: any) => {
 		const question = data.results[questionIndex];
 		if (e.target.textContent === question.correct_answer) {
-			console.log('masuk score');
+			const {correct_answer} = question;
 			dispatch(handleScoreChange(score + 1));
 		}
 
+		const answere_cookies = {
+			result: [
+				{
+					user_answer: e.target.textContent,
+				},
+			],
+		};
+
 		if (e.target.textContent !== question.correct_answer) {
-			console.log('masuk wrong');
 			dispatch(handleWrongAnswer(wrongAnswer + 1));
 		}
+
+		const cookieData = Cookies.get('answer');
+		const prevData = cookieData ? JSON.parse(cookieData) : [];
+		const newData = [...prevData, answere_cookies];
+		Cookies.set('answer', JSON.stringify(newData));
 
 		if (questionIndex + 1 < data.results.length) {
 			setQuestionIndex(questionIndex + 1);
@@ -109,6 +122,17 @@ export default function Question() {
 			}, 1000);
 			if (time === 0) {
 				dispatch(handleWrongAnswer(wrongAnswer + 1));
+				const answere_cookies = {
+					result: [
+						{
+							user_answer: 'time_out',
+						},
+					],
+				};
+				const cookieData = Cookies.get('answer');
+				const prevData = cookieData ? JSON.parse(cookieData) : [];
+				const newData = [...prevData, answere_cookies];
+				Cookies.set('answer', JSON.stringify(newData));
 				if (questionIndex + 1 < data.results.length) {
 					setQuestionIndex(questionIndex + 1);
 				} else {
