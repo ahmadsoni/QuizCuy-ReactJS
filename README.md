@@ -21,6 +21,7 @@ Repositori ini dikemas dengan teknologi :
 - ⌛ Time Quiz
 - 📃 Count Quiz
 - 📊 Score Quiz
+- 📃 Resume Quiz
 
 ## Cara Menjalankan
 

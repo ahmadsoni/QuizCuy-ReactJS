@@ -61,6 +61,9 @@ export default function Question() {
 	const {data, isError, isLoading} = useQuery(
 		'result',
 		useReactQuery,
+		{
+			refetchOnWindowFocus: false,
+		},
 	);
 	// Get question
 	const handleAnswer = useMemo(() => async () => {

@@ -88,7 +88,7 @@ export default function Resume() {
 								backgroundColor:
 						cookiesAnswers[dataIndex].result[0].user_answer === data
 							? 'green'
-							: evaluasi?.data.results[dataIndex].correct_answer === data
+							: evaluasi?.data.results[dataIndex].correct_answer === data && cookiesAnswers[dataIndex].result[0].user_answer !== 'time_out'
 								? 'red'
 								: 'blue',
 							}}
