@@ -54,6 +54,7 @@ npm run dev
 <img src="./public/desktop-2.png" alt="Desktop" width="100%" />
 <img src="./public/desktop-3.png" alt="Desktop" width="100%" />
 <img src="./public/desktop-4.png" alt="Desktop" width="100%" />
+<img src="./public/desktop-5.png" alt="Desktop" width="100%" />
 
 </div>
 👉 📱 Versi Mobile
@@ -62,4 +63,5 @@ npm run dev
 <img src="./public/mobile-2.png" alt="Desktop" width="35%" />
 <img src="./public/mobile-3.png" alt="Desktop" width="35%" />
 <img src="./public/mobile-4.png" alt="Desktop" width="35%" />
+<img src="./public/mobile-5.png" alt="Desktop" width="35%" />
 </div>
